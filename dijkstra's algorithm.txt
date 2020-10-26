@@ -1,0 +1,183 @@
+#include <stdio.h>
+#include <math.h>
+#define max 200
+#define nolink 100
+
+int i,j,size,row,col;
+
+
+int smallest();
+int *extract();
+int *complexSum();
+int *compare();
+
+
+void main(){
+    
+printf("Enter the number of nodes: ");
+scanf("%d\n",&size);
+// i = size;
+// j = size;
+row = size;
+col = size;
+int mat[row][col];
+int i,j;
+
+// input the matrix
+
+for(i=0;i<row;i++){
+   for(j=0;j<col;j++){  
+    scanf("%d",&mat[i][j]);  
+  } 
+}
+    
+//display the matrix;
+printf("The Input matrix is: \n");
+for(i=0;i<row;i++){  
+    for(j=0;j<col;j++){
+      printf("%d\t",mat[i][j]);  
+    }
+    printf("\n");
+  }
+
+
+// 1 the first array is default
+int a[size];
+a[0]=0;
+for(i=1;i<size;i++){
+    a[i]=max;
+}
+printf("\n");
+printf("The first default array is: ");
+for(i=0;i<size;i++){
+    printf("%d\t",a[i]);
+}
+
+
+smallest(mat,a);
+
+
+}// main end 
+
+// extracting the given row
+int *extract(int mat[i][j],int i){
+    printf("\n");
+    printf("The %d st row of the matrix is extracting.....  ", i);
+    static int arr[3];
+    for(j=0; j<size; j++){
+       int v = mat[i][j];
+       if(v==0){
+           printf("Zero found  ");
+           arr[j]=nolink;
+       }else {
+           printf("Zero not found  ");
+            arr[j]=v;
+       }
+       printf("%d\t",arr[j]);
+    }
+    printf("\n");
+    printf("\n");
+    printf("The extracted array is:  ");
+    for(i=0;i<size;i++){
+    printf("%d\t",arr[i]);
+    }
+    return arr;
+    
+}
+
+int *compare(int *old, int *new){
+    int i;
+    for(i=0;i<size;i++){
+        if(old[i]>new[i]){
+            old[i]=new[i];
+        }
+    }
+    printf("\n");
+    printf("\n");
+    printf("\nThe Result array of the compared arrays : ");
+    for(i=0;i<size;i++){
+    printf("%d\t",old[i]);
+    }
+    return old;
+}
+
+int *complexSum(int val,int pos,int *a){
+    int i;
+    static int added[4];
+    for(i=0;i<size;i++){
+        printf("\nFrom : %d",a[i]);
+        added[i]=a[i]+val;
+        if(added[i] == nolink+val){
+            added[i] = max;
+        }
+        printf("  To : %d",added[i]);
+    }
+    printf("\nThe array before making the INDEX(%d) zero: ",pos);
+    for(i=0;i<size;i++){
+    printf("%d\t",added[i]);
+    }
+    added[pos]=0;
+    printf("\nThe array ready to compare: ");
+    for(i=0;i<size;i++){
+    printf("%d\t",added[i]);
+    }
+    return added;
+}
+
+
+int smallest(int mat[i][j],int *a){
+    printf("\nFrom this array: \n");
+    for(i=0;i<size;i++){
+    printf("%d\t",a[i]);
+    }
+    int c;
+    int v=0;
+    int location = 1;
+    int Smallest=a[1];
+    for (c = 0; c < size; c++){
+        if(a[c]==0){
+            v++;
+            printf("\nA zero is found but omitted");
+        }
+        else if (a[c] < a[location]){
+            Smallest=a[c];
+            location = c;
+        }
+        else if(a[c] > a[location] && a[location] == 0){
+            Smallest=a[c];
+            location = c;
+        }
+    }
+    if(Smallest == 200){
+        Smallest = 0;
+        location = 0;
+        printf("\n");
+        printf("\nIt is the default first array");
+        printf("\nSmallest element in an Array = %d", Smallest);
+        printf("\nPosition of the Smallest element = %d", location);
+    }
+    else{
+        printf("\n");
+        printf("\nSmallest element in an Array = %d", Smallest);
+        //pass this Smallerst to add int the nect row in complexSum function
+        printf("\nPosition of the Smallest element = %d", location);
+        //pass this Position to extract the nect row in extract function and complexSum
+    }
+    
+        
+    if(v==size-1){
+        printf("\nThe END\n");
+    }
+    else {
+    int *ext;
+    ext=extract(mat,location);
+    int *new;
+    new=complexSum(Smallest,location,ext);
+    int *old;
+    old=compare(a,new);
+    smallest(mat,old);
+  }
+  return 0;
+}
+
+    
